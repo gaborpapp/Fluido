@@ -20,8 +20,8 @@ namespace ds {
     {
         Fluido(ivec2(width,height));
     }
-    
-    Fluido::Fluido(ivec2 size):mSize(size)
+
+    Fluido::Fluido(const ivec2 &size):mSize(size)
     {
         mImpulseColorNew = false;
         mImpulseVelocityNew = false;
@@ -194,7 +194,7 @@ namespace ds {
         
     }
     
-    void Fluido::clear(const gl::FboRef &fbo, ColorA color)
+    void Fluido::clear(const gl::FboRef &fbo, const ColorA &color)
     {
         gl::ScopedFramebuffer   scopedfbo(fbo);
         gl::viewport(fbo->getSize());
@@ -400,7 +400,7 @@ namespace ds {
         buffer->swap();
     }
     
-    void Fluido::Buoyancy(const gpGpuFrameBufferRef &buffer, const gl::TextureRef &temperature, const gl::TextureRef &density, float ambientTemperature, float timeStep, float kappa, float sigma, vec3 gravity)
+    void Fluido::Buoyancy(const gpGpuFrameBufferRef &buffer, const gl::TextureRef &temperature, const gl::TextureRef &density, float ambientTemperature, float timeStep, float kappa, float sigma, const vec3 &gravity)
     {
         
         gl::ScopedFramebuffer   fbo(buffer->getBuffer());
@@ -501,7 +501,7 @@ namespace ds {
         buffer->swap();
     }
     
-    void Fluido::injectImpulse(const gl::FboRef &destFbo, vec2 position, float radius, vec4 color)
+    void Fluido::injectImpulse(const gl::FboRef &destFbo, const vec2 &position, float radius, const vec4 &color)
     {
         
         gl::ScopedBlend alpha(true);
@@ -575,32 +575,32 @@ namespace ds {
         gl::draw(obstacle, mObstaclesFbo->getBounds());
     }
     
-    void Fluido::drawDensity(vec2 size)
+    void Fluido::drawDensity(const vec2 &size)
     {
         drawDensity(Rectf(vec2(0.0f), size));
     }
     
-    void Fluido::drawVelocity(vec2 size)
+    void Fluido::drawVelocity(const vec2 &size)
     {
         drawVelocity(Rectf(vec2(0.0f), size));
     }
     
-    void Fluido::drawTemperature(vec2 size)
+    void Fluido::drawTemperature(const vec2 &size)
     {
         drawTemperature(Rectf(vec2(0.0f), size));
     }
     
-    void Fluido::drawPressure(vec2 size)
+    void Fluido::drawPressure(const vec2 &size)
     {
         drawPressure(Rectf(vec2(0.0f), size));
     }
     
-    void Fluido::drawObstacles(vec2 size)
+    void Fluido::drawObstacles(const vec2 &size)
     {
         drawObstacles(Rectf(vec2(0.0f), size));
     }
     
-    void Fluido::drawDensity(Rectf bounds)
+    void Fluido::drawDensity(const Rectf &bounds)
     {
         gl::ScopedTextureBind tex0(mDensityBuffr->getTexture());
         gl::ScopedGlslProg shader(visualizeShader);
@@ -608,7 +608,7 @@ namespace ds {
         gl::drawSolidRect(bounds);
     }
     
-    void Fluido::drawVelocity(Rectf bounds)
+    void Fluido::drawVelocity(const Rectf &bounds)
     {
         gl::ScopedTextureBind tex0(mVelocityBuffer->getTexture());
         gl::ScopedGlslProg shader(velVisualizerShader);
@@ -616,7 +616,7 @@ namespace ds {
         gl::drawSolidRect(bounds);
     }
     
-    void Fluido::drawTemperature(Rectf bounds)
+    void Fluido::drawTemperature(const Rectf &bounds)
     {
         gl::ScopedTextureBind tex0(mTemperatureBuffer->getTexture());
         gl::ScopedGlslProg shader(visualizeShader);
@@ -624,7 +624,7 @@ namespace ds {
         gl::drawSolidRect(bounds);
     }
     
-    void Fluido::drawPressure(Rectf bounds)
+    void Fluido::drawPressure(const Rectf &bounds)
     {
         gl::ScopedTextureBind tex0(mPressureBuffer->getTexture());
         gl::ScopedGlslProg shader(visualizeShader);
@@ -632,7 +632,7 @@ namespace ds {
         gl::drawSolidRect(bounds);
     }
     
-    void Fluido::drawObstacles(Rectf bounds)
+    void Fluido::drawObstacles(const Rectf &bounds)
     {
         gl::ScopedTextureBind tex0(mObstaclesFbo->getColorTexture());
         gl::ScopedGlslProg shader(visualizeShader);

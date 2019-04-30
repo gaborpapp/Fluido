@@ -1,6 +1,6 @@
 //
 //  gpGpuFrameBuffer.h
-//  
+//
 //  The MIT License (MIT)
 //  Copyright (c) 2015 Luca Lolli.
 //  Created by luca lolli on 16/12/2015.
@@ -20,11 +20,9 @@ namespace ds {
         initFbo();
     }
 
-    gpGpuFrameBuffer::gpGpuFrameBuffer(ivec2 size, GLint colorFormat )
+    gpGpuFrameBuffer::gpGpuFrameBuffer(const ivec2 &size, GLint colorFormat )
     {
-        
         gpGpuFrameBuffer(size.x, size.y, colorFormat);
-        
     }
 
     gpGpuFrameBuffer::~gpGpuFrameBuffer(){}
@@ -35,30 +33,30 @@ namespace ds {
         mTextureFormat.setMinFilter( GL_LINEAR );
         mTextureFormat.setWrap(GL_REPEAT, GL_REPEAT);
         mTextureFormat.setInternalFormat( mColorFormat );
-        
+
         //Create fbo with two attachments for faster ping pong
         mFboFormat.attachment( GL_COLOR_ATTACHMENT0, gl::Texture2d::create( mWidth, mHeight, mTextureFormat ) )
         .attachment( GL_COLOR_ATTACHMENT1, gl::Texture2d::create( mWidth, mHeight, mTextureFormat ) );
-        
+
         mReadIndex	= GL_COLOR_ATTACHMENT0;
         mWriteIndex = GL_COLOR_ATTACHMENT1;
         mFbo		= gl::Fbo::create(mWidth, mHeight, mFboFormat );
-        
+
         clear();
     }
 
     void gpGpuFrameBuffer::clear()
     {
         mFbo->bindFramebuffer();
-        
+
         const GLenum buffers[ 2 ] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-        
+
         gl::drawBuffers( 2, buffers );
-        
+
         gl::viewport( mFbo->getSize() );
-        
+
         gl::clear(ColorA(0.0,0.0,0.0,0.0));
-        
+
         mFbo->unbindFramebuffer();
     }
 
@@ -101,7 +99,7 @@ namespace ds {
     void gpGpuFrameBuffer::unbindBuffer(bool toSwap)
     {
         mFbo->unbindFramebuffer();
-        
+
         if(toSwap)
         {
             swap();
